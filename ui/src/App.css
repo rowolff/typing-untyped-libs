@@ -35,7 +35,12 @@ button {
   color: #61dafb;
 }
 
-button:hover {
+button:disabled {
+  cursor: not-allowed;
+  color: grey;
+}
+
+button:hover:enabled {
   text-decoration: underline;
   cursor: pointer;
 }

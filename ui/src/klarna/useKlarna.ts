@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 
 export const useKlarna = (containerId: string) => {
@@ -10,13 +10,12 @@ export const useKlarna = (containerId: string) => {
     clientToken: string;
   };
 
-  const fetchClientToken = async () => {
+  const fetchClientToken = useCallback(async () => {
     const { data } = await axios.get<TokenResponse>(
       'http://localhost:8080/token'
     );
     setClientToken(data.clientToken);
-    console.log(data.clientToken);
-  };
+  }, []);
 
   useEffect(() => {
     fetchClientToken();
@@ -27,16 +26,16 @@ export const useKlarna = (containerId: string) => {
     script.onload = () => {
       setReady(true);
     };
-  }, [containerId]);
+  }, [containerId, fetchClientToken]);
 
-  useEffect(() => {
-    if (ready) {
-      const Klarna = (window as any).Klarna;
-      Klarna.Payments.init({
-        client_token: clientToken,
-      });
-    }
-  }, [ready]);
+  // useEffect(() => {
+  //   if (ready) {
+  //     const Klarna = (window as any).Klarna;
+  //     Klarna.Payments.init({
+  //       client_token: clientToken,
+  //     });
+  //   }
+  // }, [ready]);
 
   return { klarnaContainerRef, ready };
 };
