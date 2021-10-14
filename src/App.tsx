@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 
+import { Invoice } from './klarna/Invoice';
 import './App.css';
 
 function App() {
@@ -8,14 +9,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>Click the link below to pay with invoice.</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Buy naow!
-        </a>
+        <Invoice />
       </header>
     </div>
   );
