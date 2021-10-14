@@ -28,6 +28,18 @@
   color: #61dafb;
 }
 
+button {
+  font-size: calc(10px + 2vmin);
+  background-color: transparent;
+  border: none;
+  color: #61dafb;
+}
+
+button:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
