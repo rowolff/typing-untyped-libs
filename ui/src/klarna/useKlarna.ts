@@ -18,14 +18,17 @@ export const useKlarna = (containerId: string) => {
   }, []);
 
   useEffect(() => {
-    fetchClientToken();
-    const script = document.createElement('script');
-    script.src = 'https://x.klarnacdn.net/kp/lib/v1/api.js';
-    script.id = containerId;
-    document.body.appendChild(script);
-    script.onload = () => {
-      setReady(true);
+    const loadScript = async () => {
+      await fetchClientToken();
+      const script = document.createElement('script');
+      script.src = 'https://x.klarnacdn.net/kp/lib/v1/api.js';
+      script.id = containerId;
+      document.body.appendChild(script);
+      script.onload = () => {
+        setReady(true);
+      };
     };
+    loadScript();
   }, [containerId, fetchClientToken]);
 
   // useEffect(() => {
