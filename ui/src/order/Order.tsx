@@ -12,7 +12,7 @@ export const Order: React.FC<OrderProps> = ({ id }) => {
   return (
     <section>
       <p>Thank you for your order. Your order id is:</p>
-      <a href="http://idealo.de">{id}</a>
+      <a href="https://jobs.idealo.com/jobs">{id}</a>
     </section>
   );
 };

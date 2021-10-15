@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { ORDER_DATA } from '../orderdata';
+import { ORDER_DATA } from '../order/orderdata';
 
 export const useKlarna = (
   containerId: string,
@@ -12,20 +12,12 @@ export const useKlarna = (
   const [initialised, setInitialized] = useState<boolean>(false);
   const [ready, setReady] = useState<boolean>(false);
 
-  type TokenResponse = {
-    clientToken: string;
-  };
-
-  const fetchClientToken = useCallback(async () => {
-    const { data } = await axios.get<TokenResponse>(
-      'http://localhost:8080/token'
-    );
-    setClientToken(data.clientToken);
-  }, []);
-
   useEffect(() => {
     const loadScript = async () => {
-      await fetchClientToken();
+      const { data } = await axios.get<ClientTokenResponse>(
+        'http://localhost:8080/token'
+      );
+      setClientToken(data.clientToken);
       const script = document.createElement('script');
       script.src = 'https://x.klarnacdn.net/kp/lib/v1/api.js';
       script.id = 'Klarna';
@@ -35,7 +27,7 @@ export const useKlarna = (
       };
     };
     loadScript();
-  }, [containerId, fetchClientToken]);
+  }, []);
 
   useEffect(() => {
     if (loaded) {
@@ -45,7 +37,7 @@ export const useKlarna = (
       });
       setInitialized(true);
     }
-  }, [loaded]);
+  }, [loaded, clientToken]);
 
   useEffect(() => {
     if (initialised) {
@@ -58,7 +50,7 @@ export const useKlarna = (
         (res: any) => (res.show_form ? setReady(true) : null)
       );
     }
-  }, [initialised]);
+  }, [initialised, containerId]);
 
   const checkout = () => {
     const Klarna = (window as any).Klarna;
@@ -75,12 +67,6 @@ export const useKlarna = (
     );
   };
 
-  type AuthTokenResponse = {
-    authorization_token: string;
-  };
-  type AuthResult = {
-    order_id: string;
-  };
   const authorize = async ({ authorization_token }: AuthTokenResponse) => {
     const { data } = await axios.post<AuthResult>(
       'http://localhost:8080/authorize',
