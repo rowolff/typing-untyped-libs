@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
+import { ORDER_DATA } from './orderdata';
+
 export const useKlarna = (containerId: string) => {
   const [clientToken, setClientToken] = useState<string>('');
   const [loaded, setLoaded] = useState<boolean>(false);
   const [initialised, setInitialized] = useState<boolean>(false);
   const [ready, setReady] = useState<boolean>(false);
-  const [authToken, setAuthToken] = useState<any>(null);
 
   type TokenResponse = {
     clientToken: string;
@@ -62,6 +63,7 @@ export const useKlarna = (containerId: string) => {
       {
         payment_method_category: 'pay_later',
       },
+      ORDER_DATA,
       (res: any) => {
         if (res.approved) {
           authorize(res);
