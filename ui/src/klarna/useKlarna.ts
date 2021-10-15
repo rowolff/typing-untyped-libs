@@ -29,52 +29,13 @@ export const useKlarna = (
     loadScript();
   }, []);
 
-  // https://fettblog.eu/typescript-hasownproperty/
-  function hasOwnProperty<X extends {}, Y extends PropertyKey>(
-    obj: X,
-    prop: Y
-  ): obj is X & Record<Y, unknown> {
-    return obj.hasOwnProperty(prop);
-  }
-
   useEffect(() => {
     if (loaded) {
-      let Klarna: unknown;
-      if (
-        typeof window === 'object' &&
-        window !== null &&
-        hasOwnProperty(window, 'Klarna') &&
-        typeof window.Klarna === 'object'
-      ) {
-        Klarna = window.Klarna;
-      }
-
-      let Payments: unknown;
-      if (
-        typeof Klarna === 'object' &&
-        Klarna !== null &&
-        hasOwnProperty(Klarna, 'Payments') &&
-        typeof Klarna.Payments === 'object'
-      ) {
-        Payments = Klarna.Payments;
-      }
-
-      let init;
-      if (
-        typeof Payments === 'object' &&
-        Payments !== null &&
-        hasOwnProperty(Payments, 'init') &&
-        typeof Payments.init === 'function'
-      ) {
-        init = Payments.init;
-      }
-
-      if (init) {
-        init({
-          client_token: clientToken,
-        });
-        setInitialized(true);
-      }
+      const Klarna = window.Klarna;
+      Klarna.Payments.init({
+        client_token: clientToken,
+      });
+      setInitialized(true);
     }
   }, [loaded, clientToken]);
 
