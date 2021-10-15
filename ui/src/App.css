@@ -46,6 +46,12 @@ button:hover:enabled {
   cursor: pointer;
 }
 
+article {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -10,9 +10,9 @@ export const Order: React.FC<OrderProps> = ({ id }) => {
   }
 
   return (
-    <article>
+    <section>
       <p>Thank you for your order. Your order id is:</p>
       <a href="http://idealo.de">{id}</a>
-    </article>
+    </section>
   );
 };

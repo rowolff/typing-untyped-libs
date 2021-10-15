@@ -17,7 +17,7 @@ export const Invoice: React.FC<InvoiceProps> = ({ shown, onSuccess }) => {
   return (
     <section>
       <p>Click the link below to pay with invoice.</p>
-      <div id={KLARNA_PAYMENTS_CONTAINER} />
+      <article id={KLARNA_PAYMENTS_CONTAINER} />
       <button disabled={!ready} onClick={checkout}>
         Buy Naow!
       </button>
