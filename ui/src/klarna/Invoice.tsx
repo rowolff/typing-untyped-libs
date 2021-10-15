@@ -3,12 +3,14 @@ import { useKlarna } from './useKlarna';
 const KLARNA_PAYMENTS_CONTAINER = 'klarna-payments-container';
 
 export const Invoice: React.FC = () => {
-  const { klarnaContainerRef, ready } = useKlarna(KLARNA_PAYMENTS_CONTAINER);
+  const { ready, checkout } = useKlarna(KLARNA_PAYMENTS_CONTAINER);
 
   return (
     <section>
-      <button disabled={!ready}>Buy Naow!</button>
-      <div id={KLARNA_PAYMENTS_CONTAINER} ref={klarnaContainerRef} />
+      <div id={KLARNA_PAYMENTS_CONTAINER} />
+      <button disabled={!ready} onClick={checkout}>
+        Buy Naow!
+      </button>
     </section>
   );
 };
