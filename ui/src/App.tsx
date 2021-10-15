@@ -1,18 +1,30 @@
 import logo from './logo.svg';
 
+import { useState } from 'react';
+
 import { Invoice } from './klarna/Invoice';
+import { Order } from './Order';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [showInvoice, setShowInvoice] = useState<boolean>(true);
+  const [orderId, setOrderId] = useState<string>('');
+
+  const success = (id: string) => {
+    setOrderId(id);
+    setShowInvoice(false);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>Click the link below to pay with invoice.</p>
-        <Invoice />
+
+        <Invoice onSuccess={success} shown={showInvoice} />
+        <Order id={orderId} />
       </header>
     </div>
   );
-}
+};
 
 export default App;

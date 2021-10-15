@@ -1,9 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-import { ORDER_DATA } from './orderdata';
+import { ORDER_DATA } from '../orderdata';
 
-export const useKlarna = (containerId: string) => {
+export const useKlarna = (
+  containerId: string,
+  success: (id: string) => void
+) => {
   const [clientToken, setClientToken] = useState<string>('');
   const [loaded, setLoaded] = useState<boolean>(false);
   const [initialised, setInitialized] = useState<boolean>(false);
@@ -75,8 +78,11 @@ export const useKlarna = (containerId: string) => {
   type AuthTokenResponse = {
     authorization_token: string;
   };
+  type AuthResult = {
+    order_id: string;
+  };
   const authorize = async ({ authorization_token }: AuthTokenResponse) => {
-    const { data } = await axios.post(
+    const { data } = await axios.post<AuthResult>(
       'http://localhost:8080/authorize',
       {
         authorization_token,
@@ -86,7 +92,9 @@ export const useKlarna = (containerId: string) => {
       }
     );
 
-    console.log('final: ', data);
+    if (data.order_id) {
+      success(data.order_id);
+    }
   };
 
   return { ready, checkout };

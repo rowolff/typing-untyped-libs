@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -45,20 +45,18 @@ app.get('/token', async (_req, res) => {
 
 app.post('/authorize', async (req, res) => {
   const authToken = req.body.authorization_token;
-
-  console.log(req.body);
-
-  let status: any;
   try {
     const { data } = await klarnaApi.post(
       `/authorizations/${authToken}/order`,
       authorizationRequest
     );
-    status = data;
+    return res.status(200).send(data);
   } catch (e) {
-    console.log('error: ', (e as any).response);
+    const axiosError = e as AxiosError;
+    return res
+      .status(axiosError?.response?.status || 503)
+      .send('Authorization Rejected!'); // don't let the client know the details
   }
-  return res.status(200).send(status);
 });
 
 app.listen(8080);
