@@ -16,6 +16,7 @@ export const useKlarna = (
   const [loaded, setLoaded] = useState<boolean>(false);
   const [initialised, setInitialized] = useState<boolean>(false);
   const [ready, setReady] = useState<boolean>(false);
+  const [Klarna, setKlarna] = useState<Klarna>();
 
   useEffect(() => {
     const loadScript = async () => {
@@ -29,24 +30,23 @@ export const useKlarna = (
       document.body.appendChild(script);
       script.onload = () => {
         setLoaded(true);
+        setKlarna(window.Klarna);
       };
     };
     loadScript();
   }, []);
 
   useEffect(() => {
-    if (loaded) {
-      const Klarna = window.Klarna;
+    if (loaded && Klarna) {
       Klarna.Payments.init({
         client_token: clientToken,
       });
       setInitialized(true);
     }
-  }, [loaded, clientToken]);
+  }, [loaded, clientToken, Klarna]);
 
   useEffect(() => {
-    if (initialised) {
-      const Klarna = window.Klarna;
+    if (initialised && Klarna) {
       Klarna.Payments.load(
         {
           container: `#${containerId}`,
@@ -55,10 +55,13 @@ export const useKlarna = (
         ({ show_form }) => (show_form ? setReady(true) : null)
       );
     }
-  }, [initialised, containerId]);
+  }, [initialised, containerId, Klarna]);
 
   const checkout = () => {
-    const Klarna = window.Klarna;
+    if (!Klarna) {
+      return;
+    }
+
     Klarna.Payments.authorize(
       {
         payment_method_category: KlarnaPaymentMethodCategory.PAYLATER,
