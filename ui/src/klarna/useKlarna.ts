@@ -3,6 +3,11 @@ import axios from 'axios';
 
 import { ORDER_DATA } from '../order/orderdata';
 
+enum KlarnaPaymentMethodCategory {
+  PAYNOW = 'pay_now',
+  PAYLATER = 'pay_later',
+}
+
 export const useKlarna = (
   containerId: string,
   success: (id: string) => void
@@ -41,33 +46,35 @@ export const useKlarna = (
 
   useEffect(() => {
     if (initialised) {
-      const Klarna = (window as any).Klarna;
+      const Klarna = window.Klarna;
       Klarna.Payments.load(
         {
           container: `#${containerId}`,
-          payment_method_category: 'pay_later',
+          payment_method_category: KlarnaPaymentMethodCategory.PAYLATER,
         },
-        (res: any) => (res.show_form ? setReady(true) : null)
+        ({ show_form }) => (show_form ? setReady(true) : null)
       );
     }
   }, [initialised, containerId]);
 
   const checkout = () => {
-    const Klarna = (window as any).Klarna;
+    const Klarna = window.Klarna;
     Klarna.Payments.authorize(
       {
-        payment_method_category: 'pay_later',
+        payment_method_category: KlarnaPaymentMethodCategory.PAYLATER,
       },
       ORDER_DATA,
-      (res: any) => {
-        if (res.approved) {
-          authorize(res);
+      ({ approved, authorization_token, error }) => {
+        if (approved) {
+          complete(authorization_token);
+        } else {
+          console.log('Sth went wrong:', error);
         }
       }
     );
   };
 
-  const authorize = async ({ authorization_token }: AuthTokenResponse) => {
+  const complete = async (authorization_token: string) => {
     const { data } = await axios.post<AuthResult>(
       'http://localhost:8080/authorize',
       {
