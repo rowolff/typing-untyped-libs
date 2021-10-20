@@ -15,6 +15,7 @@
     "install:ui": "cd ./ui && yarn",
     "install:server": "cd ./server && yarn",
     "start:ui": "cd ./ui && yarn start",
-    "start:server": "cd ./server && yarn start"
+    "start:server": "cd ./server && yarn start",
+    "test": "cd ./ui && yarn test"
   }
 }
