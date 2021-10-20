@@ -1,6 +1,23 @@
-# Getting Started with Create React App
+# Abstract
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repo showcases how you can integrate a JavaScript SDK at runtime while still enjoying the comfort of type checking that you are used to in TypeScript, even if no `@types/...` definitions are available.
+
+# Getting Started
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). It has a client (ui) and a server component.
+
+Run `yarn install` to install dependencies for both components.
+
+This example app integrates the [Klarna Payments JavaScript SDK](https://docs.klarna.com/klarna-payments/api-call-descriptions/load-klarna-payments/) which allows you to make an invoice payment.
+
+Before using the example, make sure to create a developer playground account in the [Klarna Merchant Portal](https://playground.eu.portal.klarna.com/) and generate new Klarna API credentials under Settings > Klarna API Credentials.
+
+Download the created credentials, then either create an environment file (`touch ./server/.env`) or set the following environment variables in your terminal:
+
+```bash
+KLARNA_USERNAME=...
+KLARNA_PASSWORD=...
+```
 
 ## Available Scripts
 
@@ -8,39 +25,27 @@ In the project directory, you can run:
 
 ### `yarn start`
 
-Runs the app in the development mode.\
+Runs the server and the ui in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
+The server runs on `http://localhost:8080` and has CORS rules applied that allow port 3000 to make requests against it.
+
 ### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner in the interactive watch mode.
 
-### `yarn build`
+## Evolution of this project
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The conversion of an untyped lib to a typesafe one can be followed by checking out the project at various stages. The readme you are consuming now is from the final stage. The other stages are:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Working Klarna checkout without any type checking: `git checkout tags/v2`
+1. A solution using `unknown` instead of `any`: `git checkout tags/v3`
+1. Intermediate step with extending the Window interface with our own type: `git checkout tags/v4`
+1. Final step with full type safety: `git checkout tags/v5`
+1. ....and tests....: `git checkout tags/v6`
+1. and a readme: `git checkout main`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+(yes, there is also a v1 tag, but this is literally the starting state of CRA and it will mess up the dependencies due to changed folder structure - check this out at your own peril)
