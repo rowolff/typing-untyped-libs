@@ -42,21 +42,7 @@ const customer = {
     country: 'DE',
   },
   order_amount: 10,
-  order_lines: [
-    {
-      type: 'physical',
-      reference: '19-402',
-      name: 'Battery Power Pack',
-      quantity: 1,
-      unit_price: 10,
-      tax_rate: 0,
-      total_amount: 10,
-      total_discount_amount: 0,
-      total_tax_amount: 0,
-      product_url: 'https://www.estore.com/products/f2a8d7e34',
-      image_url: 'https://www.exampleobjects.com/logo.png',
-    },
-  ],
+  order_lines: [...product.order_lines],
 };
 
 export const sessionRequest = {
